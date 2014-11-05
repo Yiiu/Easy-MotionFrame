@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<style type="text/css">
+	div{
+		height: 100px;
+		width: 300px;
+		background: blue;
+		margin: 5px;
+		opacity: .3;
+		alpha(opacity: 3)
+	}
+</style>
+<script type="text/javascript">
+var timer=null;
+window.onload = function(){
+	var aDiv=document.getElementsByTagName('div');
+	for (var i=0;i<aDiv.length;i++) {
+		aDiv[i].onmouseover = function(){
+			startMove(this,'opacity',90);
+			startMove(this,'width',400);
+		}
+		aDiv[i].onmouseout = function(){
+			startMove(this,'opacity',30);
+			startMove(this,'width',300);
+		}
+	}
+}
+// 缓冲运动
+function startMove(obj,attr,iTarget){
+	clearInterval(obj.timer);									//各各div都用字及的定时器
+	obj.timer=setInterval(function(){
+		var iCur = 0;
+		if(attr=='opacity'){
+			iCur = parseFloat(getStyle(obj,attr))*100;
+		}else{
+			iCur = parseInt(getStyle(obj,attr));
+		}
+		var iSpeed=(iTarget-iCur)/8;							// 速度
+		iSpeed=iSpeed>0?Math.ceil(iSpeed):Math.floor(iSpeed);	//要是iSpeed大于等于0，那么iSpeed向上取整，否则向下取整。
+		if(iCur==iTarget){
+			clearInterval(timer);
+		}else{
+			if(attr=='opacity'){
+				obj.style.filter = 'alpha(opacity:'+ iCur+iSpeed +')'
+				obj.style.opacity = (iCur+iSpeed)/100 ;
+				//obj.style[attr] = iCur+iSpeed+'px';
+			}else{
+				obj.style[attr] = iCur+iSpeed+'px';
+			}
+			
+		}
+	},30);
+}
+function getStyle(obj,attr){
+	if(obj.currentStyle){
+		return obj.currentStyle[attr];
+	}else{
+		return getComputedStyle(obj,false)[attr]
+	}
+}
+</script>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+</body>
+</html>
